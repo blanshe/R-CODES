@@ -1,0 +1,29 @@
+library(grid)
+library(ggnewscale)
+library(ggtext)
+library(tidyverse)
+library(shadowtext)
+library(patchwork)
+
+banks <- read_csv("banks-three.csv")
+#basic plot
+bar <- ggplot(data = banks, aes(y = Amount, x = Year, fill = Bank)) + geom_bar(position = "dodge", stat = "identity") + scale_fill_manual('Banks', values=c('coral2', 'steelblue', 'pink', '#c51b8a'))
+
+# customising y-axis 
+
+
+bar <- bar + scale_y_continuous(limits = c(0, 80), breaks = seq(10, 70, by = 10), expand = c(0,0), position = "left") + theme(axis.title.x = element_blank())
+
+# final customisations 
+
+bar <- bar + theme(panel.background = element_rect(fill = "white"), panel.grid = element_blank(), panel.grid.major.y = element_line(color = "#A8BAC4", size = 0.3), axis.line.x.bottom = element_line(color = "black"),  axis.ticks.length.y = unit(0, "mm"), axis.ticks.length.x = unit(2, "mm"), axis.text.x = element_text(family = "Arial", size = 10), axis.text.y = element_text(family = "Arial", size = 10)) 
+
+bar <- bar + theme( plot.margin = margin(0.004, 0.02, 0.01, 0.02, "npc"))
+
+#add titles 
+
+bar <- bar + labs( y = "Profit (USD)", title = "Profitability", subtitle = "Top commercial banks in Uganda recorded $170 million\n in profits in 2021", caption = "Source: Banks' financial statements \n The Africa Report Magazine") + theme(plot.title = element_text(family = "Arial", face = "bold", size = 26, vjust = -2), plot.subtitle = element_text(family = "Arial", size = 16, vjust = -2), plot.caption = element_text(size = 12, hjust = c(0, 0)))
+
+#save 
+ggsave("final2.png", bar, units = "cm", width = 27, height = 20, dpi = 300)
+
