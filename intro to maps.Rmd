@@ -1,0 +1,13 @@
+library(dplyr)
+library(readr)
+nytimes <- read_csv("Desktop/R-PRACTICE/nytimes.csv")
+times <- read_csv("nytimes.csv")
+mapdata <- map_data("world")
+mapdata <- left_join(mapdata, times, by = "region")
+view(mapdata)
+
+mapdata1 <- mapdata %>% filter(!is.na(mapdata$region))
+map1 <- ggplot(mapdata1, aes(x= long, y = lat, group = group)) + geom_polygon(aes(fill = number), color = "black")
+
+map2 <- map1 + scale_fill_gradient(name = "mentions in New \n York Times in 2016", low = "yellow", high = "red", na.value = "grey50") + theme(axis.text.x = element_blank(), axis.text.y = element_blank(), axis.ticks = element_blank(), axis.title.x = element_blank(), axis.title.y = element_blank(), rect = element_blank())
+map2
