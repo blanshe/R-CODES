@@ -1,0 +1,28 @@
+
+library(grid)
+library(tidyverse)
+library(shadowtext)
+
+#defining colors
+BLUE <- "#076fa2"
+RED <- "#E3120B"
+BLACK <- "#202020"
+GREY <- "grey50"
+russia <- read_csv("russia-uganda.csv")
+plt <- ggplot(data = russia)+geom_col(aes(x=Value, y=as.factor(Year)), fill= "#e6550d", width=0.9)
+
+#Add labels & customization
+
+plt <- plt + scale_x_continuous(limits = c(0,370), breaks = seq(0, 350, by =50), expand = c(0,0), position = "top") + scale_y_discrete(expand = expansion(add = c(0,0.5))) + theme(panel.background = element_rect(fill = "white"), panel.grid.major.x = element_line(color = "#A8BAC4", size = 0.3), axis.ticks.length = unit(0,"mm"), axis.line.y.left = element_line(color= "#636363"), axis.title.y = element_blank(), axis.title.x = element_blank(), axis.text.x = element_text(family = "Arial", size = 10), axis.text.y = element_text(family = "Arial", size = 10))
+
+plt <- plt + theme( plot.margin = margin(0.01, 0.02, 0.01, 0.02, "npc"))
+
+#add titles 
+
+plt <- plt + labs(title = "Trade flow", subtitle = "Russia exports to Uganda averaged about $40 million \n excpect 2020, 2011 and 2012 due to purchase of military equipment", caption = "Source: UN COMTRADE \n The Africa Report Magazine") + theme(plot.title = element_text(family = "Arial", face = "bold", size = 25, vjust = -0.1), plot.subtitle = element_text(family = "Arial", size = 16, vjust = -0.1), plot.caption = element_text(size = 12, hjust = c(0, 0)))
+
+plt
+
+# save 
+
+ggsave("russia-final.jpeg", plt, units = "cm", width = 24, height = 18, dpi = 300)
