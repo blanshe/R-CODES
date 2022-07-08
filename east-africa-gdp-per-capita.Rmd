@@ -1,0 +1,37 @@
+#line chart on gold and coffee trade 
+library(tidyverse)
+library(dplyr)
+library(grid)
+gdp <- read_csv("gdp.csv")
+
+# basic chart 
+plot <- ggplot(data= gdp, aes(x = Year)) + geom_line(aes(y = Kenya), size = 0.9, color = "#2ca25f") +geom_line(aes(y = Uganda, ), size=0.9, color="#2b8cbe") +geom_line(aes(y = Burundi, ), size=0.9, color="#c51b8a") + geom_line(aes(y = Tanzania), size = 0.9, color = "#fc9272") + geom_line(aes(y = Rwanda), size = 0.9, color = "#756bb1")
+
+#customise 
+
+plot <- plot + scale_x_continuous(limits = c(1999.5, 2020.5), expand = c(0,0), breaks = c(2000, 2005, 2010, 2015, 2020), labels = c("2000", "05", "10", "15", "2020")) + scale_y_continuous(limits = c(-50, 2000), breaks = seq(300, 1800, by = 300), expand = c(0,0), position = "left", labels = (labels=scales::dollar_format()))
+
+# customise 
+
+plot <- plot + theme(panel.background = element_rect(fill = "white"), panel.grid = element_blank(), panel.grid.major.y = element_line(color = "#A8BAC4", size = 0.3), axis.line.x.bottom = element_line(color = "black"),  axis.ticks.length.y = unit(0, "mm"), axis.ticks.length.x = unit(2, "mm"), axis.text.x = element_text(family = "Arial", size = 10), axis.text.y = element_text(family = "Arial", size = 10, hjust = 1, vjust = -0.3)) + theme(axis.title.x = element_blank()) + theme(axis.title.y = element_blank())
+
+# adding labels 
+
+plot <- plot + annotate(geom = "text", x = 2015, y = 1600, label = "Kenya", size = 6, family = "Arial", lineheight = 0.2, color = "#2ca25f") + annotate(geom = "text", x = 2014.5, y = 1100, label = "Tanzania", size = 6, family = "Arial", lineheight = 0.2, color = "#fc9272") + annotate(geom = "text", x = 2014, y = 400, label = "Burundi", size = 6, family = "Arial", lineheight = 0.2, color = "#c51b8a")
+
+#annoations
+
+plot <- plot + annotate(geom = "text", x = 2007.6, y = 1320, label = "Uganda", size = 6, family = "Arial", lineheight = 0.2, color = "#2b8cbe") + annotate(geom = "curve", x = 2012, y = 800, xend = 2009, yend = 1300, curvature = 0.4, colour = "grey", size=0.4, alpha=0.9, arrow = arrow(length = unit(0.2, "cm"), ends = "first"))
+ 
+plot <- plot + annotate(geom = "text", x = 2004, y = 1000, label = "Rwanda", size = 6, family = "Arial", lineheight = 0.2, color = "#756bb1") + annotate(geom = "curve", x = 2010, y = 620, xend = 2005.4, yend = 1000, curvature = 0.4, colour = "grey", size=0.4, alpha=0.9, arrow = arrow(length = unit(0.2, "cm"), ends = "first"))
+
+#margines
+ 
+plot <- plot + theme( plot.margin = margin(0.0o9, 0.09, 0.009, 0.002, "npc"))
+
+#labels
+
+plot <- plot + labs(title = "Middle income status?", subtitle = "Uganda claim middle income status, World Bank says no. \nThey disagree on how per capita income should be measured", caption = "Source: World Bank \nThe Africa Report Magazine") + theme(plot.title = element_text(family = "Arial", face = "bold", size = 18, vjust = -2), plot.subtitle = element_text(family = "Arial", size = 16, vjust = -2), plot.caption = element_text(size = 10, hjust = c(0, 0)))
+
+#save 
+ggsave("gdp-final.png", plot, units = "cm", width = 20, height =14, dpi = 300)
