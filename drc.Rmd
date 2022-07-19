@@ -1,0 +1,35 @@
+#packages 
+
+library(tidyverse)
+library(dplyr)
+library(grid)
+# data 
+drc <- read_csv("drc.csv")
+
+#basic area chart
+
+plot2 <- ggplot(data = drc_ug) + geom_area(aes(x = year, y = figures, fill = type), color = "white") + scale_fill_manual( values = c("#99d8c9", "#fee6ce")) + theme(legend.position = "none")
+
+# customisation
+plot2 <- plot2 + scale_x_continuous(limits = c(2009.5, 2021.5), expand = c(0,0), breaks = c(2010, 2013, 2016, 2019, 2021), labels = c("2010", "13", "16", "19", "2021")) + scale_y_continuous(limits = c(0, 700), breaks = seq(100, 600, by = 100), expand = c(0,0), position = "left", labels = (labels=scales::dollar_format()))
+
+# customization
+
+plot2 <- plot2 + theme(panel.background = element_rect(fill = "white"), panel.grid = element_blank(), panel.grid.major.y = element_line(color = "#A8BAC4", size = 0.3), axis.line.x.bottom = element_line(color = "black"),  axis.ticks.length.y = unit(0, "mm"), axis.ticks.length.x = unit(2, "mm"), axis.text.x = element_text(family = "Arial", size = 10), axis.text.y = element_text(family = "Arial", size = 10, hjust = -20, vjust = -0.3)) + theme(axis.title.x = element_blank()) + theme(axis.title.y = element_blank())
+
+# labels 
+
+plot2 <- plot2 + annotate(geom = "text", x = 2017, y = 50, label = "Imports", size = 6, family = "Arial", lineheight = 0.2, color = "#636363") + annotate(geom = "text", x = 2017, y = 270, label = "Exports", size = 6, family = "Arial", lineheight = 0.2, color = "#636363")
+
+# titles 
+
+plot2 <- plot2 + labs(title = "Rush for DRC market", subtitle = "Uganda exports to DRC were worth $665 million in 2021,\nbut the country is angling itself to tap more of the market", caption = "Source: Bank of Uganda \nThe Africa Report Magazine") + theme(plot.title = element_text(family = "Arial", face = "bold", size = 20, vjust = -2), plot.subtitle = element_text(family = "Arial", size = 16, vjust = -2), plot.caption = element_text(size = 12, hjust = c(0, 0)))
+
+# margins 
+
+plot2 <- plot2 + theme( plot.margin = margin(0.009, 0.009, 0.009, 0.02, "npc"))
+
+#save chart
+
+ggsave("drc.png", plot2, units = "cm", width = 20, height =14, dpi = 300)
+
